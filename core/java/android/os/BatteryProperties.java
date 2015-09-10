@@ -41,6 +41,10 @@ public class BatteryProperties implements Parcelable {
     public int dockBatteryTemperature;
     public String dockBatteryTechnology;
 
+    // MTK
+    // FIXME: proper detection of MTK healthd instead of this
+    private static final boolean MTK_HARDWARE = true;
+
     public BatteryProperties() {
     }
 
@@ -77,14 +81,20 @@ public class BatteryProperties implements Parcelable {
         chargerUsbOnline = p.readInt() == 1 ? true : false;
         chargerWirelessOnline = p.readInt() == 1 ? true : false;
         batteryStatus = p.readInt();
+        /* batteryStatus_smb = */ p.readInt();
         batteryHealth = p.readInt();
         batteryPresent = p.readInt() == 1 ? true : false;
+        /* batteryPresent_smb = */ p.readInt() /* == 1 ? true : false */;
         batteryLevel = p.readInt();
+        /* batteryLevel_smb = */ p.readInt();
         batteryVoltage = p.readInt();
+        /* batteryCurrentNow = */ p.readInt();
+        /* batteryChargeCounter = */ p.readInt();
         batteryTemperature = p.readInt();
+        /* adjustPower = */ p.readInt();
         batteryTechnology = p.readString();
 
-        dockBatterySupported = p.readInt() == 1 ? true : false;
+        dockBatterySupported = MTK_HARDWARE ? false : p.readInt() == 1 ? true : false;
         if (dockBatterySupported) {
             chargerDockAcOnline = p.readInt() == 1 ? true : false;
             dockBatteryStatus = p.readInt();
@@ -111,12 +121,22 @@ public class BatteryProperties implements Parcelable {
         p.writeInt(chargerUsbOnline ? 1 : 0);
         p.writeInt(chargerWirelessOnline ? 1 : 0);
         p.writeInt(batteryStatus);
+        p.writeInt(0);  // batteryStatus_smb
         p.writeInt(batteryHealth);
         p.writeInt(batteryPresent ? 1 : 0);
+        p.writeInt(0);  // batteryPresent_smb
         p.writeInt(batteryLevel);
+        p.writeInt(50);  // batteryLevel_smb
         p.writeInt(batteryVoltage);
+        p.writeInt(0);  // batteryCurrentNow
+        p.writeInt(0);  // batteryChargeCounter
         p.writeInt(batteryTemperature);
+        p.writeInt(0);  // adjustPower
         p.writeString(batteryTechnology);
+
+        if (MTK_HARDWARE) {
+            return;
+        }
 
         p.writeInt(dockBatterySupported ? 1 : 0);
         if (dockBatterySupported) {
