@@ -51,7 +51,8 @@ public class BatteryProperties implements Parcelable {
         // on the healthd binary for some MTK-specific strings may be more
         // reliable, but it's arguably more overhead.
         MTK_HEALTHD = new java.io.File("/factory_init.rc").exists()
-                      || new java.io.File("/meta_init.rc").exists();
+                      || new java.io.File("/meta_init.rc").exists()
+                      || new java.io.File("/_have_mtk_healthd").exists();
     }
 
     public BatteryProperties() {
