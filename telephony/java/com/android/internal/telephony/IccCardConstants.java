@@ -55,6 +55,16 @@ public class IccCardConstants {
     /* PERM_DISABLED means ICC is permanently disabled due to puk fails */
     public static final String INTENT_VALUE_ABSENT_ON_PERM_DISABLED = "PERM_DISABLED";
 
+    // MTK ICC lock reasons
+    /* NETWORK_SUBSET means ICC is locked on NETWORK SUBSET PERSONALIZATION */
+    public static final String INTENT_VALUE_LOCKED_NETWORK_SUBSET = "NETWORK_SUBSET";
+    /* CORPORATE means ICC is locked on CORPORATE PERSONALIZATION */
+    public static final String INTENT_VALUE_LOCKED_CORPORATE = "CORPORATE";
+    /* SERVICE_PROVIDER means ICC is locked on SERVICE_PROVIDER PERSONALIZATION */
+    public static final String INTENT_VALUE_LOCKED_SERVICE_PROVIDER = "SERVICE_PROVIDER";
+    /* SIM means ICC is locked on SIM PERSONALIZATION */
+    public static final String INTENT_VALUE_LOCKED_SIM = "SIM";
+
     /**
      * This is combination of IccCardStatus.CardState and IccCardApplicationStatus.AppState
      * for external apps (like PhoneApp) to use
