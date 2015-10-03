@@ -56,6 +56,8 @@ public class IccCardConstants {
     public static final String INTENT_VALUE_ABSENT_ON_PERM_DISABLED = "PERM_DISABLED";
 
     // MTK ICC lock reasons
+    /* NETWORK means ICC is locked on NETWORK PERSONALIZATION */
+    public static final String INTENT_VALUE_LOCKED_NETWORK = "NETWORK";
     /* NETWORK_SUBSET means ICC is locked on NETWORK SUBSET PERSONALIZATION */
     public static final String INTENT_VALUE_LOCKED_NETWORK_SUBSET = "NETWORK_SUBSET";
     /* CORPORATE means ICC is locked on CORPORATE PERSONALIZATION */
