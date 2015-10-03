@@ -2181,6 +2181,7 @@
         <item>CHINA\u0020\u0020MOBILE</item>
         <item>CMCC</item>
         <item>CHN-UNICOM</item>
+        <item>UNICOM</item>
         <item>China Mobile</item>
         <item>China Unicom</item>
         <item>China Telecom</item>
@@ -2196,6 +2197,7 @@
     <string-array name="locale_carrier_names">
         <item>China_Mobile</item>
         <item>China_Mobile</item>
+        <item>China_Unicom</item>
         <item>China_Unicom</item>
         <item>China_Mobile</item>
         <item>China_Unicom</item>
