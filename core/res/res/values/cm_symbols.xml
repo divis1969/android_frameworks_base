@@ -84,6 +84,8 @@
     <java-symbol type="integer" name="config_buttonBrightnessSettingDefault" />
     <java-symbol type="integer" name="config_keyboardBrightnessSettingDefault" />
 
+    <java-symbol type="bool" name="config_buttonBrightnessForceConfigurable" />
+
     <java-symbol type="string" name="config_geofenceServicesProvider" />
     <java-symbol type="string" name="config_comboNetworkLocationProvider" />
     <java-symbol type="string" name="tethered_notification_no_device_message" />
