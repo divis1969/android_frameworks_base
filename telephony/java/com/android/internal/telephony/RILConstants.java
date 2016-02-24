@@ -377,8 +377,8 @@ cat include/telephony/ril.h | \
 
     // MediaTek Custom States
     // oh no
-    static final int RIL_REQUEST_GET_PHONE_RAT_FAMILY = 130;
-    static final int RIL_REQUEST_SET_PHONE_RAT_FAMILY = 131;
+    // DS: static final int RIL_REQUEST_GET_PHONE_RAT_FAMILY = 130;
+    // DS: static final int RIL_REQUEST_SET_PHONE_RAT_FAMILY = 131;
 
     static final int RIL_REQUEST_MTK_BASE = 2000;
     static final int RIL_REQUEST_GET_COLP = (RIL_REQUEST_MTK_BASE + 0);
