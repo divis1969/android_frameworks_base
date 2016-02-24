@@ -269,6 +269,9 @@ public class SubscriptionManager {
     /** @hide */
     public static final int DATA_ROAMING_DEFAULT = DATA_ROAMING_DISABLE;
 
+    //DS: MTK
+    public static final int LTE_DC_PHONE_ID = TelephonyManager.getDefault().getPhoneCount();
+
     /**
      * TelephonyProvider column name for the MCC associated with a SIM.
      * <P>Type: INTEGER (int)</P>
