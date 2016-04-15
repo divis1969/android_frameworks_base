@@ -1480,7 +1480,43 @@ exit:
     return jStatus;
 }
 
+static jint
+android_media_AudioSystem_setAudioData(JNIEnv *env, jobject clazz,
+                                       jint jA, jint jB, jbyteArray jArray)
+{
+    ALOGV("setAudioData");
+    if (jArray == NULL || env->GetArrayLength(jArray) == 0) {
+        ALOGE("setAudioData: emply buffer");
+        return (jint)AUDIO_JAVA_BAD_VALUE;
+    }
 
+    jbyte * buffer = env->GetByteArrayElements(jArray, NULL);
+
+    int status = AudioSystem::setAudioData((int)jA, (unsigned long)jB, (char*)buffer);
+
+    env->ReleaseByteArrayElements(jArray, buffer, 0);
+    ALOGV("setAudioData: status %d", status);
+    return (jint)status;
+}
+
+static jint
+android_media_AudioSystem_getAudioData(JNIEnv *env, jobject clazz,
+                                       jint jA, jint jB, jbyteArray jArray)
+{
+    ALOGV("getAudioData");
+    if (jArray == NULL || env->GetArrayLength(jArray) == 0) {
+        ALOGE("getAudioData: emply buffer");
+        return (jint)AUDIO_JAVA_BAD_VALUE;
+    }
+
+    jbyte * buffer = env->GetByteArrayElements(jArray, NULL);
+
+    int status = AudioSystem::getAudioData((int)jA, (unsigned long)jB, (char*)buffer);
+
+    env->ReleaseByteArrayElements(jArray, buffer, 0);
+    ALOGV("getAudioData: status %d", status);
+    return (jint)status;
+}
 
 // ----------------------------------------------------------------------------
 
@@ -1525,6 +1561,10 @@ static JNINativeMethod gMethods[] = {
                                     (void *)android_media_AudioSystem_getAudioHwSyncForSession},
     {"registerPolicyMixes",    "(Ljava/util/ArrayList;Z)I",
                                             (void *)android_media_AudioSystem_registerPolicyMixes},
+    {"getAudioData",    "(II[B)I",
+                        (void *)android_media_AudioSystem_getAudioData},
+    {"setAudioData",    "(II[B)I",
+                        (void *)android_media_AudioSystem_setAudioData},
 
 };
 
