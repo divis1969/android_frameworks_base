@@ -42,6 +42,7 @@ import android.content.res.TypedArray;
 import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.hardware.SensorManager;
 import android.hardware.input.InputManager;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -916,7 +917,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     class MyOrientationListener extends WindowOrientationListener {
         MyOrientationListener(Context context, Handler handler) {
-            super(context, handler);
+            super(context, handler, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
         @Override

@@ -80,10 +80,8 @@ public abstract class WindowOrientationListener {
      * {@link android.hardware.SensorManager SensorManager}). Use the default
      * value of {@link android.hardware.SensorManager#SENSOR_DELAY_NORMAL 
      * SENSOR_DELAY_NORMAL} for simple screen orientation change detection.
-     *
-     * This constructor is private since no one uses it.
      */
-    private WindowOrientationListener(Context context, Handler handler, int rate) {
+    protected WindowOrientationListener(Context context, Handler handler, int rate) {
         mHandler = handler;
         mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         mRate = rate;
