@@ -1063,6 +1063,14 @@
     <integer name="config_keyboardBrightnessSettingDefault">0</integer>
     <bool name="config_deviceHasVariableButtonBrightness">false</bool>
 
+    <!-- True if button brightness should be configurable even if default
+         value is set to 0 -->
+    <bool name="config_buttonBrightnessForceConfigurable">false</bool>
+
+    <!-- Overridden brightness value of enabled state if button brightness is
+         forced to be configurable -->
+    <integer name="config_buttonBrightnessOverriddenEnabledValue">255</integer>
+
     <!-- Amount of time it takes for the light sensor to warm up in milliseconds.
          For this time after the screen turns on, the Power Manager
          will not debounce light sensor readings -->
@@ -2182,6 +2190,7 @@
         <item>CHINA\u0020\u0020MOBILE</item>
         <item>CMCC</item>
         <item>CHN-UNICOM</item>
+        <item>UNICOM</item>
         <item>China Mobile</item>
         <item>China Unicom</item>
         <item>China Telecom</item>
@@ -2197,6 +2206,7 @@
     <string-array name="locale_carrier_names">
         <item>China_Mobile</item>
         <item>China_Mobile</item>
+        <item>China_Unicom</item>
         <item>China_Unicom</item>
         <item>China_Mobile</item>
         <item>China_Unicom</item>

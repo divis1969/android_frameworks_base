@@ -509,7 +509,13 @@ public class ZygoteInit {
             Process.setArgV0(parsedArgs.niceName);
         }
 
-        final String systemServerClasspath = Os.getenv("SYSTEMSERVERCLASSPATH");
+        // XXX: add back the two missing CM-specific packages due to possible
+        // MTK bootloader restriction
+        String tmpSystemServerClasspath = Os.getenv("SYSTEMSERVERCLASSPATH");
+        if (tmpSystemServerClasspath != null && !tmpSystemServerClasspath.contains("org.cyanogenmod")) {
+            tmpSystemServerClasspath = "/system/framework/org.cyanogenmod.platform.jar:/system/framework/org.cyanogenmod.hardware.jar:" + tmpSystemServerClasspath;
+        }
+        final String systemServerClasspath = tmpSystemServerClasspath;
         if (systemServerClasspath != null) {
             performSystemServerDexOpt(systemServerClasspath);
         }
