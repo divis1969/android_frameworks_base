@@ -509,10 +509,7 @@ public class ZygoteInit {
             Process.setArgV0(parsedArgs.niceName);
         }
 
-        // Flyme hack: add back the two missing CM-specific packages due to
-        // Flyme bootloader restriction
-        final String cmSystemServerClasspath = "/system/framework/org.cyanogenmod.platform.jar:/system/framework/org.cyanogenmod.hardware.jar";
-        final String systemServerClasspath = cmSystemServerClasspath + ":" + Os.getenv("SYSTEMSERVERCLASSPATH");
+        final String systemServerClasspath = Os.getenv("SYSTEMSERVERCLASSPATH");
         if (systemServerClasspath != null) {
             performSystemServerDexOpt(systemServerClasspath);
         }

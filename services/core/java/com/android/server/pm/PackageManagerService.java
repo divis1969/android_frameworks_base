@@ -1552,10 +1552,6 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             if (systemServerClassPath != null) {
                 String[] systemServerClassPathElements = splitString(systemServerClassPath, ':');
-                // Flyme hack: we can't use our boot.img due to locked bootloader,
-                // but we can always add back the missing bits here.
-                alreadyDexOpted.add("/system/framework/org.cyanogenmod.platform.jar");
-                alreadyDexOpted.add("/system/framework/org.cyanogenmod.hardware.jar");
                 for (String element : systemServerClassPathElements) {
                     alreadyDexOpted.add(element);
                 }
