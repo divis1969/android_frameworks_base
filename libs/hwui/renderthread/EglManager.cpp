@@ -30,6 +30,8 @@
 
 #define WAIT_FOR_GPU_COMPLETION 0
 
+#undef EGL_KHR_swap_buffers_with_damage
+
 // Android-specific addition that is used to show when frames began in systrace
 EGLAPI void EGLAPIENTRY eglBeginFrame(EGLDisplay dpy, EGLSurface surface);
 
