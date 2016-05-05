@@ -87,6 +87,7 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.IApplicationToken;
+import android.view.IGestureManager;
 import android.view.IWindowManager;
 import android.view.InputChannel;
 import android.view.InputDevice;
@@ -5719,6 +5720,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     msg.sendToTarget();
                 }
             }
+            // START Meizu
+            case KeyEvent.KEYCODE_GESTURE: {
+                if (wakeUpSystemByGestureIfNeeded(this, keyCode, down, this.isScreenOn())) {
+                    isWakeKey = true;
+                    result &= ~ACTION_PASS_TO_USER;
+                }
+            }
+            // END Meizu
         }
 
         if (useHapticFeedback) {
@@ -7544,6 +7553,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return true;
         }
 
+        return false;
+    }
+
+    // Meizu
+    private static boolean wakeUpSystemByGestureIfNeeded(PhoneWindowManager windowManager, int key, boolean down, boolean screenOn) {
+        if (key != KeyEvent.KEYCODE_GESTURE || screenOn || !down) {
+            return false;
+        }
+        Log.e("GestureManager", "IGestureManager handling gesture keycode");
+        IGestureManager interface1 = IGestureManager.Stub.asInterface(ServiceManager.getService("gesture_manager"));
+        try {
+            return interface1.triggerGesture();
+        } catch (RemoteException ex) {
+            Log.e("GestureManager", "IGestureManager threw RemoteException", ex);
+        }
         return false;
     }
 }

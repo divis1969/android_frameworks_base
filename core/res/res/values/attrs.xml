@@ -1774,6 +1774,17 @@
         <enum name="KEYCODE_TV_MEDIA_CONTEXT_MENU" value="257" />
         <enum name="KEYCODE_TV_TIMER_PROGRAMMING" value="258" />
         <enum name="KEYCODE_HELP" value="259" />
+        <!-- MTK/Meizu key codes -->
+        <enum name="KEYCODE_WIFI_TOGGLE" value="260" />
+        <enum name="KEYCODE_BT_TOGGLE" value="261" />
+        <enum name="KEYCODE_LOCK_TOGGLE" value="262" />
+        <enum name="KEYCODE_IME_TOGGLE" value="263" />
+        <enum name="KEYCODE_MESSAGING" value="264" />
+        <enum name="KEYCODE_GALLERY" value="265" />
+        <enum name="KEYCODE_GESTURE" value="266" />
+        <enum name="KEYCODE_SLIDE" value="267" />
+        <enum name="KEYCODE_UNLOCK" value="268" />
+        <enum name="KEYCODE_FINGERPRINT" value="269" />
     </attr>
 
     <!-- ***************************************************************** -->

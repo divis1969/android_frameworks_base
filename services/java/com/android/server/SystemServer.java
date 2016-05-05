@@ -561,6 +561,8 @@ public final class SystemServer {
         GestureService gestureService = null;
         ThemeService themeService = null;
         KillSwitchService killSwitchService = null;
+        // MTK/Meizu
+        GestureManagerService gestureManagerService = null;
 
         // Bring up services needed for UI.
         if (mFactoryTestMode != FactoryTest.FACTORY_TEST_LOW_LEVEL) {
@@ -1082,6 +1084,14 @@ public final class SystemServer {
                 ServiceManager.addService("edgegestureservice", edgeGestureService);
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting EdgeGesture service", e);
+            }
+
+            try {
+                gestureManagerService = new GestureManagerService(context);
+                ServiceManager.addService("gesture_manager", (IBinder)gestureManagerService);
+                gestureManagerService.systemReady();
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting GestureManagerService service", e);
             }
         }
 

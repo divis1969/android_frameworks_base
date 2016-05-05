@@ -749,7 +749,19 @@ public class KeyEvent extends InputEvent implements Parcelable {
     /** Key code constant: Help key. */
     public static final int KEYCODE_HELP = 259;
 
-    private static final int LAST_KEYCODE = KEYCODE_HELP;
+    /* MTK/Meizu key codes */
+    public static final int KEYCODE_WIFI_TOGGLE = 260;
+    public static final int KEYCODE_BT_TOGGLE = 261;
+    public static final int KEYCODE_LOCK_TOGGLE = 262;
+    public static final int KEYCODE_IME_TOGGLE = 263;
+    public static final int KEYCODE_MESSAGING = 264;
+    public static final int KEYCODE_GALLERY = 265;
+    public static final int KEYCODE_GESTURE = 266;
+    public static final int KEYCODE_SLIDE = 267;
+    public static final int KEYCODE_UNLOCK = 268;
+    public static final int KEYCODE_FINGERPRINT = 269;
+
+    private static final int LAST_KEYCODE = KEYCODE_FINGERPRINT;
 
     // NOTE: If you add a new keycode here you must also add it to:
     //  isSystem()
