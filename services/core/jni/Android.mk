@@ -25,7 +25,8 @@ LOCAL_SRC_FILES += \
     $(LOCAL_REL_DIR)/com_android_server_UsbHostManager.cpp \
     $(LOCAL_REL_DIR)/com_android_server_VibratorService.cpp \
     $(LOCAL_REL_DIR)/com_android_server_PersistentDataBlockService.cpp \
-    $(LOCAL_REL_DIR)/onload.cpp
+    $(LOCAL_REL_DIR)/onload.cpp \
+    $(LOCAL_REL_DIR)/com_android_server_DeviceControlService.cpp \
 
 include external/stlport/libstlport.mk
 
@@ -62,6 +63,7 @@ LOCAL_SHARED_LIBRARIES += \
     libEGL \
     libGLESv2 \
     libnetutils \
+    libcfgdevparam \
 
 ifeq ($(BOARD_USES_QC_TIME_SERVICES),true)
 LOCAL_CFLAGS += -DHAVE_QC_TIME_SERVICES=1

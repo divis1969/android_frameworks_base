@@ -563,6 +563,7 @@ public final class SystemServer {
         KillSwitchService killSwitchService = null;
         // MTK/Meizu
         GestureManagerService gestureManagerService = null;
+        DeviceControlService deviceControlService = null;
 
         // Bring up services needed for UI.
         if (mFactoryTestMode != FactoryTest.FACTORY_TEST_LOW_LEVEL) {
@@ -1086,6 +1087,7 @@ public final class SystemServer {
                 Slog.e(TAG, "Failure starting EdgeGesture service", e);
             }
 
+            // MTK/Meizu
             try {
                 gestureManagerService = new GestureManagerService(context);
                 ServiceManager.addService("gesture_manager", (IBinder)gestureManagerService);
@@ -1093,6 +1095,18 @@ public final class SystemServer {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting GestureManagerService service", e);
             }
+
+            try {
+                Slog.i(TAG, "FlymeDeviceControlService");
+                deviceControlService = new DeviceControlService(context);
+                ServiceManager.addService("device_control", deviceControlService);
+                deviceControlService.writeAccelerationFactoryCalibValue();
+                deviceControlService.writeGyroscopeFactoryCalibValue();
+                deviceControlService.writeProximitySensorFactoryCalibValue();
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting FlymeDeviceControlService service", e);
+            }
+
         }
 
         if (!disableNonCoreServices) {
