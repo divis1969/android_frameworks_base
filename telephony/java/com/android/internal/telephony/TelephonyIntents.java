@@ -673,6 +673,4 @@ public class TelephonyIntents {
     public static final String EXTRA_RADIO_AVAILABLE_STATE = "radio_available_state";
     /// @}
 
-    // DS: MTK
-    public static final String ACTION_SET_RADIO_CAPABILITY_DONE = "android.intent.action.ACTION_SET_RADIO_CAPABILITY_DONE";
 }
