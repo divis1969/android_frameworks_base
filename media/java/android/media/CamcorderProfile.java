@@ -126,9 +126,16 @@ public class CamcorderProfile
      */
     public static final int QUALITY_HVGA = 19;
 
+    public static final int QUALITY_MEIZU_DUMMY_1 = 20;
+    public static final int QUALITY_MEIZU_DUMMY_2 = 21;
+    public static final int QUALITY_MEIZU_DUMMY_3 = 22;
+    public static final int QUALITY_MEIZU_DUMMY_4 = 23;
+    public static final int QUALITY_MEIZU_VGA = 24;
+
+
     // Start and end of quality list
     private static final int QUALITY_LIST_START = QUALITY_LOW;
-    private static final int QUALITY_LIST_END = QUALITY_HVGA;
+    private static final int QUALITY_LIST_END = QUALITY_MEIZU_VGA;
 
     /**
      * Time lapse quality level corresponding to the lowest available resolution.
