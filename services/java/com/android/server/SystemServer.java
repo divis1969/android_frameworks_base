@@ -108,6 +108,7 @@ import com.android.server.usb.UsbService;
 import com.android.server.wallpaper.WallpaperManagerService;
 import com.android.server.webkit.WebViewUpdateService;
 import com.android.server.wm.WindowManagerService;
+import com.mediatek.common.thermal.MtkThermalSwitchManager;
 
 import dalvik.system.VMRuntime;
 import dalvik.system.PathClassLoader;
@@ -564,6 +565,7 @@ public final class SystemServer {
         // MTK/Meizu
         GestureManagerService gestureManagerService = null;
         DeviceControlService deviceControlService = null;
+        MtkThermalSwitchManager thermalManager = null;
 
         // Bring up services needed for UI.
         if (mFactoryTestMode != FactoryTest.FACTORY_TEST_LOW_LEVEL) {
@@ -1103,6 +1105,16 @@ public final class SystemServer {
                 deviceControlService.writeAccelerationFactoryCalibValue();
                 deviceControlService.writeGyroscopeFactoryCalibValue();
                 deviceControlService.writeProximitySensorFactoryCalibValue();
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting FlymeDeviceControlService service", e);
+            }
+
+            try {
+                Slog.i(TAG, "MtkThermalSwitchManager");
+                thermalManager = new MtkThermalSwitchManager(context);
+                //ServiceManager.addService("??", thermalManager);
+                // TODO: register in Activity manager
+                thermalManager.systemReady();
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting FlymeDeviceControlService service", e);
             }

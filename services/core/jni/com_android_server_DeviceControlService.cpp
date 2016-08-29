@@ -126,8 +126,29 @@ static jint android_server_DeviceControlService_reset_calibration(JNIEnv*, jobje
 
 static jint android_server_DeviceControlService_save_cpu_value(JNIEnv*, jobject obj, jint p0)
 {
-    ALOGE("Function '%s' is not implemented\n", __func__);
-    return -1;
+    jint res = -1;
+    if (p0 >=0 && p0 <= 3) {
+        int fd = open("/sys/power/power_mode", O_RDWR);
+        if (fd < 0) {
+            ALOGE("%s: cannot open %s, error %d (%s)\n", __func__, errno, strerror(errno));
+        } else {
+            char * value = NULL;
+            switch (p0) {
+              case 0: value = "high"; break;
+              case 1: value = "normal"; break;
+              case 2: value = "low"; break;
+              case 3: value = "benchmark"; break;
+              default: break;
+            }
+            res = write(fd, value, strlen(value));
+            close(fd);
+            ALOGE("%s: write %s (%d), result %d\n", __func__, value, p0, res);
+            if (res != -1) res = 0;
+        }
+    } else {
+        ALOGE("%s: Illegal value %d\n", __func__, p0);
+    }
+    return res;
 }
 
 static jint android_server_DeviceControlService_set_auto_cabc(JNIEnv*, jobject obj, jint p0)
