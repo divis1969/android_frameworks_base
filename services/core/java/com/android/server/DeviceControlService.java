@@ -10,6 +10,8 @@ import java.io.File;
 import android.util.Log;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.os.SystemProperties;
+
 import java.util.ArrayList;
 import android.content.Context;
 import android.hardware.SensorEventListener;
@@ -713,10 +715,31 @@ public class DeviceControlService extends IDeviceControlService.Stub
 
     public void writeProximitySensorFactoryCalibValue() {
         final int[] array = new int[7];
-        if (readCfgParam(DEVCFG_IR_CALIBRATE, array) > 0) {
-            Slog.d(TAG, "writeGp2apValue: " + array[0]);
-            writeGp2apValue(array[0]);
+        int override = -1;
+        try {
+            override = Integer.parseInt(SystemProperties.get("persist.devcontrol.proximity", "undef"));
         }
+        catch (NumberFormatException e) {};
+
+        if (override != 0) {
+            if (readCfgParam(DEVCFG_IR_CALIBRATE, array) < 0) {
+                Slog.d(TAG, "readCfgParam returned error, skipping proximity calibration");
+                return;
+            }
+        } else {
+            Slog.d(TAG, "skipping proximity calibration");
+            return;
+        }
+
+        if (override > 0) {
+            Slog.d(TAG, "override proximity calibration: " + array[0] + " => " + override);
+            array[0] = override;
+        } else {
+            Slog.d(TAG, "Use defcfg proximity calibration: " + array[0]);
+        }
+
+        Slog.d(TAG, "writeGp2apValue: " + array[0]);
+        writeGp2apValue(array[0]);
     }
 
     static class Sample
