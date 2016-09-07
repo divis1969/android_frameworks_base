@@ -43,6 +43,7 @@ int register_android_server_PersistentDataBlockService(JNIEnv* env);
 int register_android_server_fingerprint_FingerprintService(JNIEnv* env);
 int register_android_server_Watchdog(JNIEnv* env);
 int register_android_server_DeviceControlService(JNIEnv* env);
+int register_com_mediatek_perfservice_PerfServiceManager(JNIEnv* env);
 };
 
 using namespace android;
@@ -81,6 +82,7 @@ extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
     register_android_server_fingerprint_FingerprintService(env);
     register_android_server_Watchdog(env);
     register_android_server_DeviceControlService(env);
+    register_com_mediatek_perfservice_PerfServiceManager(env);
 
     return JNI_VERSION_1_4;
 }

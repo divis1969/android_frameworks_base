@@ -244,6 +244,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import com.mediatek.perfservice.PerfServiceWrapper;
 
 public final class ActivityManagerService extends ActivityManagerNative
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
@@ -18391,6 +18392,14 @@ public final class ActivityManagerService extends ActivityManagerNative
                     + " target=" + app.adjTarget);
         }
 
+        if ("top-activity".equals(app.adjType)) {
+            if (mPerfServiceWrapper == null) {
+                mPerfServiceWrapper = new PerfServiceWrapper(null);
+            }
+            if (mPerfServiceWrapper != null) {
+                mPerfServiceWrapper.setFavorPid(app.pid);
+            }
+        }
         return success;
     }
 
@@ -20102,6 +20111,31 @@ public final class ActivityManagerService extends ActivityManagerNative
                     Binder.restoreCallingIdentity(origId);
                 }
             }
+        }
+    }
+
+    // MTK
+
+    ArrayList<IActivityStateNotifier> mActStateNotifiers = new ArrayList<IActivityStateNotifier>();
+
+    PerfServiceWrapper mPerfServiceWrapper = null;
+
+    public void registerActivityStateNotifier(final IActivityStateNotifier activityStateNotifier) {
+        Slog.i("ActivityManager", "registerActivityStateNotifier");
+        if (!this.mActStateNotifiers.contains(activityStateNotifier)) {
+            this.mActStateNotifiers.add(activityStateNotifier);
+        }
+    }
+
+    void notifyActivityState(String s, String s2, IActivityStateNotifier.ActivityState activityState) {
+        for (int i = 0; i < mActStateNotifiers.size(); ++i) {
+            mActStateNotifiers.get(i).notifyActivityState(s, s2, activityState);
+        }
+    }
+
+    void notifyAppDied(int n, HashSet<String> set) {
+        for (int i = 0; i < mActStateNotifiers.size(); ++i) {
+            mActStateNotifiers.get(i).notifyAppDied(n, set);
         }
     }
 }

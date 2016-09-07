@@ -27,6 +27,7 @@ LOCAL_SRC_FILES += \
     $(LOCAL_REL_DIR)/com_android_server_PersistentDataBlockService.cpp \
     $(LOCAL_REL_DIR)/onload.cpp \
     $(LOCAL_REL_DIR)/com_android_server_DeviceControlService.cpp \
+    $(LOCAL_REL_DIR)/com_mediatek_perfservice_PerfServiceManager.cpp \
 
 include external/stlport/libstlport.mk
 
@@ -64,6 +65,7 @@ LOCAL_SHARED_LIBRARIES += \
     libGLESv2 \
     libnetutils \
     libcfgdevparam \
+    libperfservice \
 
 ifeq ($(BOARD_USES_QC_TIME_SERVICES),true)
 LOCAL_CFLAGS += -DHAVE_QC_TIME_SERVICES=1

@@ -2905,6 +2905,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
         if (isFrontStack(stack)) {
             mService.updateUsageStats(r, true);
         }
+        mService.notifyActivityState(r.packageName, r.realActivity.getShortClassName(), IActivityStateNotifier.ActivityState.Resumed);
         if (allResumedActivitiesComplete()) {
             ensureActivitiesVisibleLocked(null, 0);
             mWindowManager.executeAppTransition();

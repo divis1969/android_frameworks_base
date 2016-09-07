@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <private/hwui/DrawGlInfo.h>
 #include <strings.h>
+#include <dlfcn.h>
 
 #include "EglManager.h"
 #include "RenderThread.h"
@@ -37,6 +38,10 @@ namespace android {
 namespace uirenderer {
 namespace renderthread {
 
+typedef int (*PerfServiceFrameUpdatePtr)(int);
+
+static PerfServiceFrameUpdatePtr gPerfServiceFrameUpdatePtr = NULL;
+
 CanvasContext::CanvasContext(RenderThread& thread, bool translucent,
         RenderNode* rootRenderNode, IContextFactory* contextFactory)
         : mRenderThread(thread)
@@ -50,6 +55,20 @@ CanvasContext::CanvasContext(RenderThread& thread, bool translucent,
         , mRootRenderNode(rootRenderNode) {
     mAnimationContext = contextFactory->createAnimationContext(mRenderThread.timeLord());
     mRenderThread.renderState().registerCanvasContext(this);
+    if (gPerfServiceFrameUpdatePtr == NULL) {
+        ALOGE("Opening libperfservicenative.so");
+        void * perfServiceLib = dlopen("libperfservicenative.so", RTLD_NOW);
+        if (perfServiceLib == NULL) {
+            ALOGE("Cannot open libperfservicenative.so");
+        } else {
+            gPerfServiceFrameUpdatePtr = (PerfServiceFrameUpdatePtr)
+                dlsym(perfServiceLib, "PerfServiceNative_notifyFrameUpdate");
+            if (gPerfServiceFrameUpdatePtr == NULL) {
+                ALOGE("Cannot get PerfServiceNative_notifyFrameUpdate ptr");
+                dlclose(perfServiceLib);
+            }
+        }
+    }
 }
 
 CanvasContext::~CanvasContext() {
@@ -203,6 +222,9 @@ void CanvasContext::draw() {
     LOG_ALWAYS_FATAL_IF(!mCanvas || mEglSurface == EGL_NO_SURFACE,
             "drawRenderNode called on a context with no canvas or surface!");
 
+    if (gPerfServiceFrameUpdatePtr != NULL) {
+        (void)gPerfServiceFrameUpdatePtr(0);
+    }
     profiler().markPlaybackStart();
 
     SkRect dirty;

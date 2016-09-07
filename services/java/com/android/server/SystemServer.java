@@ -109,6 +109,8 @@ import com.android.server.wallpaper.WallpaperManagerService;
 import com.android.server.webkit.WebViewUpdateService;
 import com.android.server.wm.WindowManagerService;
 import com.mediatek.common.thermal.MtkThermalSwitchManager;
+import com.mediatek.perfservice.PerfServiceImpl;
+import com.mediatek.perfservice.PerfServiceManager;
 
 import dalvik.system.VMRuntime;
 import dalvik.system.PathClassLoader;
@@ -566,6 +568,8 @@ public final class SystemServer {
         GestureManagerService gestureManagerService = null;
         DeviceControlService deviceControlService = null;
         MtkThermalSwitchManager thermalManager = null;
+        PerfServiceImpl perfService = null;
+        PerfMgrStateNotifier perfNotifier = null;
 
         // Bring up services needed for UI.
         if (mFactoryTestMode != FactoryTest.FACTORY_TEST_LOW_LEVEL) {
@@ -1117,6 +1121,23 @@ public final class SystemServer {
                 thermalManager.systemReady();
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting FlymeDeviceControlService service", e);
+            }
+
+            if (SystemProperties.getInt("ro.mtk_perfservice_support", 0) == 1) {
+                try {
+                    PerfServiceManager perfServiceManager = new PerfServiceManager(context);
+                    perfService = new PerfServiceImpl(context, perfServiceManager);
+                    ServiceManager.addService("mtk-perfservice", perfService);
+                    // TODO: should we call PerfServiceManager.systemReady() sometime later?
+                    try {
+                        perfNotifier = new PerfMgrStateNotifier();
+                        mActivityManagerService.registerActivityStateNotifier(perfNotifier);
+                    } catch (Throwable e) {
+                        Slog.e(TAG, "Failure starting PerfMgrStateNotifier", e);
+                    }
+                } catch (Throwable e) {
+                    Slog.e(TAG, "Failure starting PerfService service", e);
+                }
             }
 
         }

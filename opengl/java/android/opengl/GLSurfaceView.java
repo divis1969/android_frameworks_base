@@ -31,11 +31,15 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.mediatek.perfservice.IPerfService;
 
 /**
  * An implementation of SurfaceView that uses the dedicated surface for
@@ -1226,6 +1230,10 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
             mRequestRender = true;
             mRenderMode = RENDERMODE_CONTINUOUSLY;
             mGLSurfaceViewWeakRef = glSurfaceViewWeakRef;
+            mPerfService = IPerfService.Stub.asInterface(ServiceManager.getService("mtk-perfservice"));
+            if (mPerfService == null) {
+                Log.i("GLThread", "mPerfService is null!");
+            }
         }
 
         @Override
@@ -1519,6 +1527,13 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     {
                         GLSurfaceView view = mGLSurfaceViewWeakRef.get();
                         if (view != null) {
+                            if (mPerfService != null) {
+                                try {
+                                    mPerfService.notifyFrameUpdate(0);
+                                } catch (RemoteException e) {
+                                    Log.e("GLThread", "Remote exception in notifyFrameUpdate:", e);
+                                }
+                            }
                             view.mRenderer.onDrawFrame(gl);
                         }
                     }
@@ -1757,6 +1772,9 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
         // End of member variables protected by the sGLThreadManager monitor.
 
         private EglHelper mEglHelper;
+
+        // MTK
+        private IPerfService mPerfService;
 
         /**
          * Set once at thread construction time, nulled out when the parent view is garbage

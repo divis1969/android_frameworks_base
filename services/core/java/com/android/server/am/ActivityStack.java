@@ -913,11 +913,13 @@ final class ActivityStack {
                     finishCurrentActivityLocked(r, FINISH_AFTER_VISIBLE, false);
                 }
             }
+            mService.notifyActivityState(r.packageName, r.realActivity.getShortClassName(), IActivityStateNotifier.ActivityState.Paused);
         }
     }
 
     final void activityStoppedLocked(ActivityRecord r, Bundle icicle,
             PersistableBundle persistentState, CharSequence description) {
+        mService.notifyActivityState(r.packageName, r.realActivity.getShortClassName(), IActivityStateNotifier.ActivityState.Stopped);
         if (r.state != ActivityState.STOPPING) {
             Slog.i(TAG, "Activity reported stop, but no longer stopping: " + r);
             mHandler.removeMessages(STOP_TIMEOUT_MSG, r);
@@ -3272,6 +3274,7 @@ final class ActivityStack {
 
         boolean removedFromHistory = false;
 
+        mService.notifyActivityState(r.packageName, r.realActivity.getShortClassName(), IActivityStateNotifier.ActivityState.Destroyed);
         cleanUpActivityLocked(r, false, false);
 
         final boolean hadApp = r.app != null;
