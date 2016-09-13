@@ -989,4 +989,7 @@ interface ITelephony {
       *   {@link android.Manifest.permission#READ_PHONE_STATE READ_PHONE_STATE}
       */
     String getDeviceId();
+
+    /* MTK */
+    int getRadioAccessFamily(int subId);
 }
