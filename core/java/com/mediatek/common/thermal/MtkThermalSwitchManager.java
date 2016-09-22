@@ -44,9 +44,9 @@ public class MtkThermalSwitchManager {
     private Context mContext;
     private int mState;
     // Meizu
-    private static final int POWER_MODE_HIGHPERFOR = 0;
+    private static final int POWER_MODE_HIGHPERFOR = 2;
     private static final int POWER_MODE_BALANCE = 1;
-    private static final int POWER_MODE_SAVING = 2;
+    private static final int POWER_MODE_SAVING = 0;
     private String SettingsCPU_L;
     private String mPrevious_SettingsCPU_L;
     private static boolean mPowerModeBenchmark = false;
@@ -106,9 +106,9 @@ public class MtkThermalSwitchManager {
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_BOOT_COMPLETED), null, mHandler);
         // Meizu
         int powerSavingMode = Settings.System.getInt(mContext.getContentResolver(), mPrevious_SettingsCPU_L, 1);
-        if (powerSavingMode < POWER_MODE_HIGHPERFOR || powerSavingMode > POWER_MODE_SAVING) {
+        if (powerSavingMode > POWER_MODE_HIGHPERFOR || powerSavingMode < POWER_MODE_SAVING) {
             powerSavingMode = Settings.Secure.getInt(mContext.getContentResolver(), SettingsCPU_L, POWER_MODE_BALANCE);
-            if (powerSavingMode < POWER_MODE_HIGHPERFOR || powerSavingMode > POWER_MODE_SAVING) {
+            if (powerSavingMode > POWER_MODE_HIGHPERFOR || powerSavingMode < POWER_MODE_SAVING) {
                 powerSavingMode = POWER_MODE_BALANCE;
             }
         }
@@ -146,13 +146,13 @@ public class MtkThermalSwitchManager {
                 mState != ThermalSwitchState.Enabling) {
             MtkThermalSwitchManager.mPowerModeBenchmark = false;
             int powerSavingMode = Settings.System.getInt(mContext.getContentResolver(), mPrevious_SettingsCPU_L, 1);
-            if (powerSavingMode < POWER_MODE_HIGHPERFOR || powerSavingMode > POWER_MODE_SAVING) {
+            if (powerSavingMode > POWER_MODE_HIGHPERFOR || powerSavingMode < POWER_MODE_SAVING) {
                 powerSavingMode = Settings.Secure.getInt(mContext.getContentResolver(), SettingsCPU_L, POWER_MODE_SAVING);
-                if (powerSavingMode < POWER_MODE_HIGHPERFOR || powerSavingMode > POWER_MODE_SAVING) {
+                if (powerSavingMode > POWER_MODE_HIGHPERFOR || powerSavingMode < POWER_MODE_SAVING) {
                     powerSavingMode = POWER_MODE_SAVING;
                 }
             }
-            if (powerSavingMode >= POWER_MODE_HIGHPERFOR && powerSavingMode <= POWER_MODE_SAVING) {
+            if (powerSavingMode <= POWER_MODE_HIGHPERFOR && powerSavingMode >= POWER_MODE_SAVING) {
                 Log.i(TAG, "it is a benchmark app And state is Dead: " + appState + ",appPackage:" + appPackage + ", setPowerSavingMode previous state: " + powerSavingMode);
                 Settings.Secure.putInt(mContext.getContentResolver(), SettingsCPU_L, powerSavingMode);
                 Settings.System.putInt(mContext.getContentResolver(), mPrevious_SettingsCPU_L, powerSavingMode);
@@ -205,7 +205,7 @@ public class MtkThermalSwitchManager {
         execShellCommand("/system/bin/thermal_manager /etc/.tp/thermal.off.conf");
         // Meizu
         int powerMode = Settings.Secure.getInt(mContext.getContentResolver(), SettingsCPU_L, POWER_MODE_BALANCE);
-        if (powerMode < POWER_MODE_HIGHPERFOR || powerMode > POWER_MODE_SAVING) {
+        if (powerMode > POWER_MODE_HIGHPERFOR || powerMode < POWER_MODE_SAVING) {
             powerMode = POWER_MODE_BALANCE;
         }
         Message message = mHandler.obtainMessage(ThermalThreadHandler.MESSAGE_BENCHMARK_PREVIOUS);
@@ -224,14 +224,14 @@ public class MtkThermalSwitchManager {
         execShellCommand(MTKToMeizuForDTM("/system/bin/thermal_manager /etc/.tp/thermal.conf"));
         mPowerModeBenchmark = false;
         int powerSavingMode = Settings.System.getInt(mContext.getContentResolver(), mPrevious_SettingsCPU_L, POWER_MODE_BALANCE);
-        if (powerSavingMode < POWER_MODE_HIGHPERFOR || powerSavingMode > POWER_MODE_SAVING) {
+        if (powerSavingMode > POWER_MODE_HIGHPERFOR || powerSavingMode < POWER_MODE_SAVING) {
             powerSavingMode = Settings.Secure.getInt(mContext.getContentResolver(), SettingsCPU_L, POWER_MODE_SAVING);
-            if (powerSavingMode < POWER_MODE_HIGHPERFOR || powerSavingMode > POWER_MODE_SAVING) {
+            if (powerSavingMode > POWER_MODE_HIGHPERFOR || powerSavingMode < POWER_MODE_SAVING) {
                 powerSavingMode = POWER_MODE_BALANCE;
             }
         }
         Log.i(TAG, "antutu time out set to powerMode is " + powerSavingMode);
-        if (powerSavingMode >= POWER_MODE_HIGHPERFOR && powerSavingMode <= POWER_MODE_SAVING) {
+        if (powerSavingMode <= POWER_MODE_HIGHPERFOR && powerSavingMode >= POWER_MODE_SAVING) {
             Settings.Secure.putInt(mContext.getContentResolver(), SettingsCPU_L, powerSavingMode);
             Settings.System.putInt(mContext.getContentResolver(), mPrevious_SettingsCPU_L, powerSavingMode);
             setPowerSavingMode(powerSavingMode);
@@ -617,7 +617,7 @@ public class MtkThermalSwitchManager {
                     mContext.getContentResolver().registerContentObserver(Settings.Secure.getUriFor(SettingsCPU_L), false, (ContentObserver)new ContentObserver(null) {
                         public void onChange(boolean b) {
                             int powerMode = Settings.Secure.getInt(mContext.getContentResolver(), SettingsCPU_L, POWER_MODE_BALANCE);
-                            if (powerMode <  POWER_MODE_HIGHPERFOR || powerMode > POWER_MODE_SAVING) {
+                            if (powerMode > POWER_MODE_HIGHPERFOR || powerMode < POWER_MODE_SAVING) {
                                 powerMode = POWER_MODE_BALANCE;
                             }
                             Settings.System.putInt(mContext.getContentResolver(), mPrevious_SettingsCPU_L, powerMode);
@@ -627,7 +627,7 @@ public class MtkThermalSwitchManager {
                             }
                             // Disabled by divis1969 to allow high performance profile
                             //if (powerMode != POWER_MODE_HIGHPERFOR) {
-                            //    setPowerMode(powerMode);
+                                setPowerMode(powerMode);
                             //}
                         }
                     });
